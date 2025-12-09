@@ -194,6 +194,16 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       font-size: 16px;
     }
 
+    /* RESPONSIVE CSS */
+    @media (max-width: 640px) {
+      .book { padding: 12px; }
+      .page { padding: 12px; margin: 12px 0 24px; }
+      .cover { grid-template-columns: 1fr; }
+      .grid { grid-template-columns: 1fr; }
+      .panel { min-height: 200px; }
+      .cover h1 { font-size: 28px; }
+    }
+
     /* print */
     @media print {
       body { background: #fff; }
@@ -542,20 +552,20 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
 
   return (
     <div className="fixed inset-0 z-[100] bg-zinc-900 flex flex-col animate-in fade-in duration-300">
-      <div className="bg-black p-4 flex justify-between items-center shadow-lg border-b border-gray-800">
+      <div className="bg-black p-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg border-b border-gray-800">
         <button 
           onClick={onBack} 
-          className="text-white flex items-center gap-2 hover:text-noir-red transition-colors px-4 py-2 rounded-lg hover:bg-white/10"
+          className="text-white flex items-center gap-2 hover:text-noir-red transition-colors px-4 py-2 rounded-lg hover:bg-white/10 w-full sm:w-auto justify-center sm:justify-start"
         >
           <ArrowLeft size={20} /> <span className="font-mono font-bold">BACK TO CASE FILE</span>
         </button>
-        <span className="text-gray-500 font-mono text-sm hidden md:inline">EVIDENCE #11-2-COMIC // SECURE VIEWER</span>
+        <span className="text-gray-500 font-mono text-xs md:text-sm hidden lg:inline">EVIDENCE #11-2-COMIC // SECURE VIEWER</span>
         <button 
            onClick={() => {
               const iframe = document.getElementById('storybook-frame') as HTMLIFrameElement;
               iframe?.contentWindow?.print();
            }}
-           className="text-white flex items-center gap-2 hover:text-noir-tan transition-colors px-4 py-2 rounded-lg hover:bg-white/10"
+           className="text-white flex items-center gap-2 hover:text-noir-tan transition-colors px-4 py-2 rounded-lg hover:bg-white/10 w-full sm:w-auto justify-center sm:justify-start"
         >
           <Printer size={20} /> <span className="font-mono font-bold">PRINT EVIDENCE</span>
         </button>
