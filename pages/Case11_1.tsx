@@ -3,6 +3,7 @@ import { CaseFile } from '../components/CaseFile';
 import { RedactedText } from '../components/RedactedText';
 import { GrammarTerminal } from '../components/GrammarTerminal';
 import { Timeline } from '../components/Timeline';
+import { DragDropSentence } from '../components/DragDropSentence';
 import { Fingerprint, AlertTriangle } from 'lucide-react';
 import { LessonPlanDisplay } from '../components/LessonPlanDisplay';
 import { LESSON_PLANS } from '../data/lessonPlans';
@@ -68,6 +69,10 @@ export const Case11_1: React.FC = () => {
               unrealEvent="hadn't crashed" 
               result="wouldn't have been caught" 
             />
+            
+            <div className="mt-8">
+               <DragDropSentence />
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
               <div className="bg-gray-100 dark:bg-zinc-900 p-8 rounded-2xl opacity-70">

@@ -4,6 +4,7 @@ import { FileText, Smartphone, AlertTriangle } from 'lucide-react';
 import { LessonPlanDisplay } from '../components/LessonPlanDisplay';
 import { LESSON_PLANS } from '../data/lessonPlans';
 import { RegretTimeline } from '../components/RegretTimeline';
+import { FillBlanks } from '../components/FillBlanks';
 
 export const Case11_2: React.FC = () => {
   const lessonData = LESSON_PLANS.find(l => l.unit === "11.2");
@@ -46,6 +47,9 @@ export const Case11_2: React.FC = () => {
                  regret="Oh no! Big mistake."
                  correction="SHOULDN'T HAVE SENT IT"
                />
+
+               {/* New Exercise */}
+               <FillBlanks />
             </div>
 
             {/* GRAMMAR BOX (Static Backup) */}

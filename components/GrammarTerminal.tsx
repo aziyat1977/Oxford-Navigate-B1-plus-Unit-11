@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Terminal, CheckCircle, XCircle, ArrowRight } from 'lucide-react';
+import { playSFX } from '../utils/audio';
 
 export const GrammarTerminal: React.FC = () => {
   const [inputIf, setInputIf] = useState('');
@@ -15,13 +16,20 @@ export const GrammarTerminal: React.FC = () => {
     if (hasHad && hasWouldHave) {
       setFeedback("MATCH CONFIRMED: 3rd Conditional Logic Valid.");
       setStatus('success');
+      playSFX('correct');
     } else {
       let msg = "SYNTAX ERROR: ";
       if (!hasHad) msg += "Missing Past Perfect (had + v3) in condition. ";
       if (!hasWouldHave) msg += "Missing 'would have' in result.";
       setFeedback(msg);
       setStatus('error');
+      playSFX('wrong');
     }
+  };
+
+  const handleTyping = (setter: (v: string) => void, val: string) => {
+    setter(val);
+    if (Math.random() > 0.5) playSFX('typing'); // Don't play on every keystroke to avoid annoyance
   };
 
   return (
@@ -38,7 +46,7 @@ export const GrammarTerminal: React.FC = () => {
             <input 
               type="text" 
               value={inputIf}
-              onChange={(e) => setInputIf(e.target.value)}
+              onChange={(e) => handleTyping(setInputIf, e.target.value)}
               placeholder="e.g. If he had crashed..."
               className="w-full bg-gray-900 border border-gray-700 text-green-400 p-3 focus:outline-none focus:border-green-500 transition-colors"
             />
@@ -53,7 +61,7 @@ export const GrammarTerminal: React.FC = () => {
             <input 
               type="text" 
               value={inputResult}
-              onChange={(e) => setInputResult(e.target.value)}
+              onChange={(e) => handleTyping(setInputResult, e.target.value)}
               placeholder="e.g. he would have died."
               className="w-full bg-gray-900 border border-gray-700 text-green-400 p-3 focus:outline-none focus:border-green-500 transition-colors"
             />

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Menu, X, Home, FolderOpen, Sun, Moon } from 'lucide-react';
+import { playSFX } from '../utils/audio';
 
 interface NavbarProps {
   activePage: string;
@@ -19,8 +20,14 @@ export const Navbar: React.FC<NavbarProps> = ({ activePage, setPage, isDark, tog
   ];
 
   const handleNav = (id: string) => {
+    playSFX('click');
     setPage(id);
     setIsOpen(false);
+  };
+
+  const handleTheme = () => {
+    playSFX('click');
+    toggleTheme();
   };
 
   return (
@@ -28,7 +35,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activePage, setPage, isDark, tog
       {/* Top Left Trigger */}
       <div className="fixed top-6 left-6 z-50 flex items-center gap-4">
         <button 
-          onClick={() => setIsOpen(true)}
+          onClick={() => { playSFX('click'); setIsOpen(true); }}
           className="bg-noir-red text-white p-3 rounded-lg shadow-lg hover:scale-110 transition-transform"
         >
           <Menu size={32} />
@@ -36,7 +43,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activePage, setPage, isDark, tog
         
         {/* Theme Toggle - Visible on desktop always */}
         <button 
-          onClick={toggleTheme}
+          onClick={handleTheme}
           className="hidden md:flex bg-white dark:bg-black text-black dark:text-white p-3 rounded-lg shadow-lg border-2 border-gray-200 dark:border-gray-700 hover:scale-110 transition-transform"
         >
           {isDark ? <Sun size={24} /> : <Moon size={24} />}
@@ -80,7 +87,7 @@ export const Navbar: React.FC<NavbarProps> = ({ activePage, setPage, isDark, tog
 
           <div className="absolute bottom-8 left-8 right-8">
              <button 
-              onClick={() => { toggleTheme(); setIsOpen(false); }}
+              onClick={() => { handleTheme(); setIsOpen(false); }}
               className="w-full flex justify-center items-center gap-2 p-4 border-2 border-gray-300 dark:border-gray-700 rounded-xl text-lg font-bold text-gray-800 dark:text-white hover:bg-gray-100 dark:hover:bg-gray-800 transition-colors"
             >
               {isDark ? <Sun size={24} /> : <Moon size={24} />}

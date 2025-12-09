@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect } from 'react';
 import { MessageSquare, X, Send, Search } from 'lucide-react';
 import { ChatMessage } from '../types';
 import { sendMessageToDetective } from '../services/geminiService';
+import { playSFX } from '../utils/audio';
 
 export const DetectiveChat: React.FC = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -21,6 +22,7 @@ export const DetectiveChat: React.FC = () => {
   const handleSend = async () => {
     if (!input.trim()) return;
 
+    playSFX('click');
     const userMsg: ChatMessage = { role: 'user', text: input, timestamp: new Date() };
     setMessages(prev => [...prev, userMsg]);
     setInput('');
@@ -28,16 +30,24 @@ export const DetectiveChat: React.FC = () => {
 
     const responseText = await sendMessageToDetective(input);
     
+    // Play sound on receive
+    playSFX('reveal');
+
     const modelMsg: ChatMessage = { role: 'model', text: responseText, timestamp: new Date() };
     setMessages(prev => [...prev, modelMsg]);
     setIsLoading(false);
+  };
+
+  const toggleChat = () => {
+    playSFX('click');
+    setIsOpen(!isOpen);
   };
 
   return (
     <>
       {/* Floating Button */}
       <button 
-        onClick={() => setIsOpen(true)}
+        onClick={toggleChat}
         className={`fixed bottom-6 right-6 bg-noir-red text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition-all z-50 ${isOpen ? 'hidden' : 'flex'}`}
       >
         <MessageSquare size={24} />

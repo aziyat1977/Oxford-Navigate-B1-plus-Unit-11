@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { ArrowLeftRight, VenetianMask } from 'lucide-react';
+import { playSFX } from '../utils/audio';
 
 interface PolysemyPair {
   id: number;
@@ -97,8 +98,10 @@ export const PolysemyGrid: React.FC = () => {
   const toggleReveal = (id: number) => {
     if (revealed.includes(id)) {
       setRevealed(revealed.filter(i => i !== id));
+      playSFX('click');
     } else {
       setRevealed([...revealed, id]);
+      playSFX('reveal');
     }
   };
 

@@ -2,7 +2,8 @@ import React from 'react';
 import { CaseFile } from '../components/CaseFile';
 import { PolysemyGrid } from '../components/PolysemyGrid';
 import { AudioDecryptor } from '../components/AudioDecryptor';
-import { Code, Headphones, VenetianMask } from 'lucide-react';
+import { ModalMatching } from '../components/ModalMatching';
+import { Code, Headphones, VenetianMask, Link } from 'lucide-react';
 import { LessonPlanDisplay } from '../components/LessonPlanDisplay';
 import { LESSON_PLANS } from '../data/lessonPlans';
 
@@ -45,7 +46,16 @@ export const Case11_3: React.FC = () => {
                
                <AudioDecryptor />
                
-               <div className="bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-700/30 p-4 rounded-lg mt-4">
+               {/* NEW EXERCISE */}
+               <div className="mt-8">
+                 <div className="flex items-center gap-2 mb-4">
+                    <Link className="text-noir-red" />
+                    <h4 className="font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">Target Practice: Matching</h4>
+                 </div>
+                 <ModalMatching />
+               </div>
+
+               <div className="bg-yellow-50 dark:bg-yellow-900/10 border border-yellow-200 dark:border-yellow-700/30 p-4 rounded-lg mt-8">
                   <h4 className="text-yellow-700 dark:text-yellow-500 font-bold uppercase text-xs mb-1">Field Note</h4>
                   <p className="text-sm text-yellow-800 dark:text-yellow-400 italic">
                      "Modals like 'must', 'may', and 'could' are elusive targets. They hide in the shadows of a sentence. Use the context to flush them out."

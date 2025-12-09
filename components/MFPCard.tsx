@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Volume2, Globe } from 'lucide-react';
+import { speak, playSFX } from '../utils/audio';
 
 interface MFPCardProps {
   word: string;
@@ -15,6 +16,19 @@ export const MFPCard: React.FC<MFPCardProps> = ({ word, ipa, type, definition, c
   const [showRu, setShowRu] = useState(false);
   const [showUz, setShowUz] = useState(false);
 
+  const handleSpeak = () => {
+    playSFX('click');
+    // Clean the word of any slashes e.g. "theft / a theft" -> "theft"
+    const cleanWord = word.split('/')[0].trim();
+    speak(cleanWord);
+  };
+
+  const toggleTranslation = (lang: 'ru' | 'uz') => {
+    playSFX('reveal');
+    if (lang === 'ru') setShowRu(!showRu);
+    else setShowUz(!showUz);
+  };
+
   return (
     <div className="bg-white dark:bg-zinc-900 border-2 border-gray-200 dark:border-gray-800 rounded-2xl p-6 shadow-xl hover:shadow-2xl transition-all duration-300 transform hover:-translate-y-1">
       
@@ -27,7 +41,11 @@ export const MFPCard: React.FC<MFPCardProps> = ({ word, ipa, type, definition, c
              <span className="text-gray-400 text-sm font-bold uppercase bg-gray-100 dark:bg-black px-2 py-1 rounded">{type}</span>
           </div>
         </div>
-        <button className="bg-noir-red/10 text-noir-red p-3 rounded-full hover:bg-noir-red hover:text-white transition-colors">
+        <button 
+          onClick={handleSpeak}
+          className="bg-noir-red/10 text-noir-red p-3 rounded-full hover:bg-noir-red hover:text-white transition-colors active:scale-90"
+          title="Listen to pronunciation"
+        >
           <Volume2 size={24} />
         </button>
       </div>
@@ -40,7 +58,16 @@ export const MFPCard: React.FC<MFPCardProps> = ({ word, ipa, type, definition, c
         </div>
         <div>
           <h4 className="text-gray-400 text-xs font-bold uppercase tracking-widest mb-1">Context</h4>
-          <p className="text-lg text-gray-600 dark:text-gray-400 italic">"{context}"</p>
+          <div className="flex items-center gap-2">
+            <p className="text-lg text-gray-600 dark:text-gray-400 italic">"{context}"</p>
+            <button 
+              onClick={() => speak(context, 0.85)} 
+              className="p-1 text-gray-400 hover:text-noir-red"
+              title="Listen to sentence"
+            >
+              <Volume2 size={16} />
+            </button>
+          </div>
         </div>
       </div>
 
@@ -48,7 +75,7 @@ export const MFPCard: React.FC<MFPCardProps> = ({ word, ipa, type, definition, c
       <div className="flex gap-4 mt-6">
         <div className="flex-1">
           <button 
-            onClick={() => setShowRu(!showRu)}
+            onClick={() => toggleTranslation('ru')}
             className={`w-full py-3 px-4 rounded-xl font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all
               ${showRu ? 'bg-blue-600 text-white' : 'bg-gray-100 dark:bg-black text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800'}
             `}
@@ -62,7 +89,7 @@ export const MFPCard: React.FC<MFPCardProps> = ({ word, ipa, type, definition, c
 
         <div className="flex-1">
           <button 
-            onClick={() => setShowUz(!showUz)}
+            onClick={() => toggleTranslation('uz')}
             className={`w-full py-3 px-4 rounded-xl font-bold text-sm uppercase tracking-wider flex items-center justify-center gap-2 transition-all
               ${showUz ? 'bg-green-600 text-white' : 'bg-gray-100 dark:bg-black text-gray-500 hover:bg-gray-200 dark:hover:bg-gray-800'}
             `}

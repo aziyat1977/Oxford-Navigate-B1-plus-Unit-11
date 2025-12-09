@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { Radio, Activity, Check, X } from 'lucide-react';
+import { Radio, Activity, Check, X, Play } from 'lucide-react';
+import { playSFX, speak } from '../utils/audio';
 
 interface AudioChallenge {
   id: number;
@@ -44,14 +45,29 @@ export const AudioDecryptor: React.FC = () => {
 
   const current = CHALLENGES[activeId];
 
+  const handlePlayAudio = () => {
+    playSFX('glitch');
+    // Read sentence with a "beep" for the blank
+    const textToRead = current.corruptedSentence.replace('___', 'beep');
+    setTimeout(() => speak(textToRead, 1.0), 500);
+  };
+
   const handleCheck = (opt: string) => {
     setSelection(opt);
     if (opt === current.correct) {
+      playSFX('correct');
       setIsSolved(true);
+      // Read the full correct sentence
+      setTimeout(() => {
+          speak(current.corruptedSentence.replace('___', current.correct));
+      }, 500);
+    } else {
+      playSFX('wrong');
     }
   };
 
   const next = () => {
+    playSFX('click');
     if (activeId < CHALLENGES.length - 1) {
       setActiveId(prev => prev + 1);
       setSelection(null);
@@ -80,18 +96,22 @@ export const AudioDecryptor: React.FC = () => {
       </div>
 
       {/* Waveform Viz */}
-      <div className="h-16 flex items-center justify-center gap-1 mb-6 opacity-50">
+      <div className="h-16 flex items-center justify-center gap-1 mb-6 opacity-50 relative group cursor-pointer" onClick={handlePlayAudio}>
         {[...Array(40)].map((_, i) => (
           <div 
             key={i} 
-            className="w-1 bg-green-500 transition-all duration-300"
+            className="w-1 bg-green-500 transition-all duration-300 group-hover:bg-green-400"
             style={{ 
               height: `${Math.random() * 100}%`,
               opacity: Math.random() > 0.5 ? 1 : 0.3
             }}
           />
         ))}
+        <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+            <Play fill="white" className="text-white drop-shadow-lg" size={48} />
+        </div>
       </div>
+      <p className="text-center text-gray-500 text-xs font-mono mb-4 uppercase">Click waveform to play corrupted audio</p>
 
       {/* Challenge Area */}
       <div className="bg-zinc-900 p-6 rounded-lg border border-gray-700 mb-6">
