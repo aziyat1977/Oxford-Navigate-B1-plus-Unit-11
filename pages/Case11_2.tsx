@@ -5,12 +5,15 @@ import { LessonPlanDisplay } from '../components/LessonPlanDisplay';
 import { LESSON_PLANS } from '../data/lessonPlans';
 import { RegretTimeline } from '../components/RegretTimeline';
 import { FillBlanks } from '../components/FillBlanks';
+import { GrammarWalkthrough } from '../components/GrammarWalkthrough';
+import { Quiz } from '../types';
 
 interface Case11_2Props {
   onOpenComic?: () => void;
+  onStartQuiz?: (quiz: Quiz) => void;
 }
 
-export const Case11_2: React.FC<Case11_2Props> = ({ onOpenComic }) => {
+export const Case11_2: React.FC<Case11_2Props> = ({ onOpenComic, onStartQuiz = () => {} }) => {
   const lessonData = LESSON_PLANS.find(l => l.unit === "11.2");
 
   return (
@@ -45,41 +48,66 @@ export const Case11_2: React.FC<Case11_2Props> = ({ onOpenComic }) => {
               </div>
             </div>
 
-            {/* INTERACTIVE TIMELINE */}
+            {/* GRAMMAR WALKTHROUGH */}
             <div className="border-t-4 border-gray-200 dark:border-gray-800 pt-8">
                <h3 className="text-2xl font-black text-gray-900 dark:text-white mb-4 flex items-center gap-3">
                  <AlertTriangle size={32} className="text-noir-tan" />
-                 CRITICISM PROTOCOL: VISUALIZED
+                 CRITICISM PROTOCOL: Past Regrets
                </h3>
-               <p className="text-gray-600 dark:text-gray-400 mb-6">
-                 When we look back at a mistake, we use <strong>should have</strong> to imagine the better past.
-               </p>
                
-               <RegretTimeline 
-                 action="SENT THE EMAIL" 
-                 regret="Oh no! Big mistake."
-                 correction="SHOULDN'T HAVE SENT IT"
+               <GrammarWalkthrough
+                  title="Should Have / Shouldn't Have"
+                  meaningExamples={[
+                    {
+                      en: "I should have been more careful.",
+                      ru: "Мне следовало быть осторожнее.",
+                      uz: "Men ehtiyotkorroq bo'lishim kerak edi."
+                    },
+                    {
+                      en: "You shouldn't have said that.",
+                      ru: "Тебе не следовало этого говорить.",
+                      uz: "Sen buni aytmasliging kerak edi."
+                    },
+                    {
+                      en: "He should have asked for permission.",
+                      ru: "Ему следовало спросить разрешения.",
+                      uz: "U ruxsat so'rashi kerak edi."
+                    }
+                  ]}
+                  timelineComponent={
+                    <RegretTimeline 
+                      action="SENT THE EMAIL" 
+                      regret="Oh no! Big mistake."
+                      correction="SHOULDN'T HAVE SENT IT"
+                    />
+                  }
+                  form="should have + V3"
+                  formNote="Use 'should have' to say a past action was a mistake or to give past advice."
+                  pronunciations={[
+                    {
+                      text: "should have",
+                      ipa: "ʃʊdəv",
+                      note: "Sounds like 'should-of'"
+                    },
+                    {
+                      text: "shouldn't have",
+                      ipa: "ʃʊdntəv",
+                      note: "The 't' is often very soft"
+                    },
+                    {
+                      text: "You should've told me",
+                      ipa: "jʊʃʊdəv",
+                      note: "Connected speech"
+                    }
+                  ]}
                />
 
-               {/* New Exercise */}
-               <FillBlanks />
+               <div className="mt-12">
+                 <FillBlanks />
+               </div>
             </div>
 
-            {/* GRAMMAR BOX (Static Backup) */}
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-              <div className="bg-red-50 dark:bg-red-900/10 p-6 rounded-2xl border border-red-100 dark:border-red-900/30">
-                 <h4 className="text-red-600 dark:text-red-400 font-black uppercase mb-2">The Mistake (Reality)</h4>
-                 <p className="text-xl text-gray-800 dark:text-gray-200">"I sent the email."</p>
-                 <span className="text-sm font-mono text-gray-500 block mt-2">Past Simple</span>
-              </div>
-              <div className="bg-green-50 dark:bg-green-900/10 p-6 rounded-2xl border border-green-100 dark:border-green-900/30">
-                 <h4 className="text-green-600 dark:text-green-400 font-black uppercase mb-2">The Correction (Criticism)</h4>
-                 <p className="text-xl text-gray-800 dark:text-gray-200">"I <span className="underline decoration-4 decoration-green-500">shouldn't have sent</span> it."</p>
-                 <span className="text-sm font-mono text-gray-500 block mt-2">Should(n't) + Have + V3</span>
-              </div>
-            </div>
-
-            {lessonData && <LessonPlanDisplay data={lessonData} />}
+            {lessonData && <LessonPlanDisplay data={lessonData} onStartQuiz={onStartQuiz} />}
          </div>
       </CaseFile>
     </div>

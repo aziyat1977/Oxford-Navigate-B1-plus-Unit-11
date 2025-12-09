@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { LessonPlanData } from '../types';
-import { Clock, Users, BookOpen, PenTool, ClipboardCheck, Lock } from 'lucide-react';
+import { LessonPlanData, Quiz } from '../types';
+import { Clock, Users, BookOpen, PenTool, ClipboardCheck, Lock, Play } from 'lucide-react';
 import { MFPCard } from './MFPCard';
-import { QuizSection } from './QuizSection';
 
 interface LessonPlanDisplayProps {
   data: LessonPlanData;
+  onStartQuiz: (quiz: Quiz) => void;
 }
 
 type TabType = 'plan' | 'vocab' | 'grammar' | 'quiz';
 
-export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({ data }) => {
+export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({ data, onStartQuiz }) => {
   const [activeTab, setActiveTab] = useState<TabType>('vocab'); // Default to vocab for learning mode
 
   // Dummy translations dictionary since they aren't in the JSON
@@ -71,7 +71,7 @@ export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({ data }) =>
             {[
               { id: 'vocab', icon: <BookOpen size={20} />, label: 'VOCAB' },
               { id: 'grammar', icon: <PenTool size={20} />, label: 'GRAMMAR' },
-              { id: 'quiz', icon: <ClipboardCheck size={20} />, label: 'QUIZ' },
+              { id: 'quiz', icon: <ClipboardCheck size={20} />, label: 'MISSIONS' },
               { id: 'plan', icon: <Clock size={20} />, label: 'PLAN' },
             ].map((tab) => (
               <button
@@ -126,7 +126,7 @@ export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({ data }) =>
                   word={item.word}
                   ipa="/.../" 
                   type="noun/verb"
-                  definition={item.context} // Using context as simplistic def here for demo
+                  definition={item.context} 
                   context={item.examples[0]}
                   ru={trans.ru}
                   uz={trans.uz}
@@ -181,19 +181,37 @@ export const LessonPlanDisplay: React.FC<LessonPlanDisplayProps> = ({ data }) =>
         )}
 
         {activeTab === 'quiz' && (
-          <div className="max-w-4xl mx-auto">
-            {data.quizzes_tests.map((quiz, idx) => (
-              <QuizSection key={idx} quiz={quiz} />
-            ))}
+          <div className="max-w-5xl mx-auto">
+            <h3 className="text-xl font-black text-gray-400 mb-6 uppercase tracking-widest">Available Missions</h3>
+            
+            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {data.quizzes_tests.map((quiz, idx) => (
+                <div key={idx} className="bg-noir-folder border-l-4 border-noir-tan p-6 rounded-lg shadow-lg hover:bg-gray-800 transition-all group">
+                   <div className="flex justify-between items-start mb-4">
+                      <span className="text-noir-tan font-mono text-xs font-bold uppercase">CLASSIFIED FILE #{idx + 1}</span>
+                      <Lock size={16} className="text-gray-500" />
+                   </div>
+                   <h4 className="text-xl font-bold text-white mb-2">{quiz.name}</h4>
+                   <p className="text-gray-400 text-sm mb-6">Duration: {quiz.timing_minutes} Minutes</p>
+                   
+                   <button 
+                     onClick={() => onStartQuiz(quiz)}
+                     className="w-full flex items-center justify-center gap-2 bg-noir-red text-white py-3 rounded font-bold uppercase text-sm tracking-wider group-hover:scale-105 transition-transform"
+                   >
+                     <Play size={16} fill="white" /> Launch Mission
+                   </button>
+                </div>
+              ))}
+            </div>
             
             {data.creative_tasks && (
-              <div className="mt-12 bg-noir-tan/10 p-6 md:p-8 rounded-3xl border-2 border-noir-tan border-dashed">
-                <h4 className="text-xl md:text-2xl font-black text-noir-tan mb-6 uppercase flex items-center gap-3">
-                  <Users size={32} /> Field Operations (Creative)
+              <div className="mt-12 bg-gray-100 dark:bg-zinc-900/50 p-6 md:p-8 rounded-3xl border-2 border-gray-200 dark:border-gray-800 border-dashed">
+                <h4 className="text-xl md:text-2xl font-black text-gray-500 mb-6 uppercase flex items-center gap-3">
+                  <Users size={32} /> Field Operations (Offline)
                 </h4>
                 <div className="grid grid-cols-1 gap-4">
                   {data.creative_tasks.map((task, i) => (
-                    <div key={i} className="bg-white dark:bg-zinc-900 p-6 rounded-xl text-lg md:text-xl font-medium text-gray-700 dark:text-gray-300 shadow-sm">
+                    <div key={i} className="bg-white dark:bg-black p-6 rounded-xl text-lg md:text-xl font-medium text-gray-700 dark:text-gray-300 shadow-sm border border-gray-200 dark:border-gray-800">
                       {task}
                     </div>
                   ))}

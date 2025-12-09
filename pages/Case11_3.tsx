@@ -6,8 +6,13 @@ import { ModalMatching } from '../components/ModalMatching';
 import { Code, Headphones, VenetianMask, Link } from 'lucide-react';
 import { LessonPlanDisplay } from '../components/LessonPlanDisplay';
 import { LESSON_PLANS } from '../data/lessonPlans';
+import { Quiz } from '../types';
 
-export const Case11_3: React.FC = () => {
+interface CaseProps {
+  onStartQuiz?: (quiz: Quiz) => void;
+}
+
+export const Case11_3: React.FC<CaseProps> = ({ onStartQuiz = () => {} }) => {
   const lessonData = LESSON_PLANS.find(l => l.unit === "11.3");
 
   return (
@@ -77,7 +82,7 @@ export const Case11_3: React.FC = () => {
             </div>
 
             {/* LESSON PLAN */}
-            {lessonData && <LessonPlanDisplay data={lessonData} />}
+            {lessonData && <LessonPlanDisplay data={lessonData} onStartQuiz={onStartQuiz} />}
           </div>
        </CaseFile>
     </div>

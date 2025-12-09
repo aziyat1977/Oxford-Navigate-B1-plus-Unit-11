@@ -7,8 +7,14 @@ import { DragDropSentence } from '../components/DragDropSentence';
 import { Fingerprint, AlertTriangle } from 'lucide-react';
 import { LessonPlanDisplay } from '../components/LessonPlanDisplay';
 import { LESSON_PLANS } from '../data/lessonPlans';
+import { GrammarWalkthrough } from '../components/GrammarWalkthrough';
+import { Quiz } from '../types';
 
-export const Case11_1: React.FC = () => {
+interface CaseProps {
+  onStartQuiz?: (quiz: Quiz) => void;
+}
+
+export const Case11_1: React.FC<CaseProps> = ({ onStartQuiz = () => {} }) => {
   const lessonData = LESSON_PLANS.find(l => l.unit === "11.1");
 
   return (
@@ -52,47 +58,75 @@ export const Case11_1: React.FC = () => {
              </div>
           </div>
 
-          {/* GRAMMAR ANIMATION SECTION */}
+          {/* GRAMMAR WALKTHROUGH */}
           <div className="border-t-4 border-gray-200 dark:border-gray-800 pt-12">
             <h3 className="text-4xl font-black text-gray-900 dark:text-white mb-6 flex items-center gap-4">
               <AlertTriangle className="text-noir-red" size={40} />
               GRAMMAR FORENSICS: Unreal Past
             </h3>
             
-            <p className="text-2xl text-gray-600 dark:text-gray-400 mb-8">
+            <p className="text-xl text-gray-600 dark:text-gray-400 mb-8">
               We assume the suspect crashed. But if he <span className="font-bold text-noir-red">hadn't</span>?
             </p>
 
-            {/* NEW ANIMATED TIMELINE */}
-            <Timeline 
-              realEvent="Crashed Plane" 
-              unrealEvent="hadn't crashed" 
-              result="wouldn't have been caught" 
+            <GrammarWalkthrough
+              title="The Unreal Past Conditional (3rd)"
+              meaningExamples={[
+                {
+                  en: "If I had known, I would have come.",
+                  ru: "Если бы я знал, я бы пришел.",
+                  uz: "Agar bilganimda, kelgan bo'lardim."
+                },
+                {
+                  en: "If he hadn't crashed, he would have escaped.",
+                  ru: "Если бы он не разбился, он бы сбежал.",
+                  uz: "Agar u qulab tushmaganda, qochib ketgan bo'lardi."
+                },
+                {
+                  en: "If they had arrived earlier, they could have caught him.",
+                  ru: "Если бы они прибыли раньше, они могли бы поймать его.",
+                  uz: "Agar ular ertaroq kelganida, uni tutishlari mumkin edi."
+                }
+              ]}
+              timelineComponent={
+                <Timeline 
+                  realEvent="Crashed Plane" 
+                  unrealEvent="hadn't crashed" 
+                  result="wouldn't have been caught" 
+                />
+              }
+              form="If + had + V3 ..., would have + V3"
+              formNote="Use 'had' for the condition (past perfect). Use 'would have' for the imagined result."
+              pronunciations={[
+                {
+                  text: "would have",
+                  ipa: "wʊdəv",
+                  note: "Weak form: Sounds like 'wood-of'"
+                },
+                {
+                  text: "wouldn't have",
+                  ipa: "wʊdntəv",
+                  note: "Negative contraction"
+                },
+                {
+                  text: "If I'd known",
+                  ipa: "aɪd",
+                  note: "'d = had"
+                }
+              ]}
             />
             
-            <div className="mt-8">
+            <div className="mt-12">
                <DragDropSentence />
             </div>
 
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mt-12">
-              <div className="bg-gray-100 dark:bg-zinc-900 p-8 rounded-2xl opacity-70">
-                <h4 className="text-sm font-black uppercase text-gray-500 mb-4 tracking-widest">The Reality</h4>
-                <p className="text-2xl font-medium text-gray-800 dark:text-gray-300">He crashed the plane.</p>
-                <p className="text-2xl font-medium text-gray-800 dark:text-gray-300">He was arrested.</p>
-              </div>
-              <div className="bg-white dark:bg-zinc-800 p-8 rounded-2xl border-l-8 border-noir-red shadow-xl">
-                <h4 className="text-sm font-black uppercase text-noir-red mb-4 tracking-widest">The Unreal (3rd Conditional)</h4>
-                <p className="text-3xl leading-relaxed text-gray-900 dark:text-white">
-                  If he <strong className="text-noir-red decoration-2 underline">hadn't crashed</strong> the plane, he <strong className="text-noir-tan decoration-2 underline">wouldn't have been</strong> arrested.
-                </p>
-              </div>
+            <div className="mt-12">
+               <GrammarTerminal />
             </div>
-
-            <GrammarTerminal />
           </div>
 
           {/* LEARNING MODULE */}
-          {lessonData && <LessonPlanDisplay data={lessonData} />}
+          {lessonData && <LessonPlanDisplay data={lessonData} onStartQuiz={onStartQuiz} />}
         </div>
       </CaseFile>
     </div>
