@@ -49,18 +49,18 @@ export const RegretTimeline: React.FC<RegretTimelineProps> = ({ action, regret, 
          </button>
       </div>
 
-      <div className="p-8 pb-0">
-        <h3 className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-widest flex items-center gap-3">
+      <div className="p-6 md:p-8 pb-0">
+        <h3 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white uppercase tracking-widest flex items-center gap-3">
           <RefreshCcw className="text-noir-tan animate-spin-slow" />
           Time Machine Protocol
         </h3>
-        <p className="text-sm font-mono text-gray-500 mt-2">
+        <p className="text-xs md:text-sm font-mono text-gray-500 mt-2">
            ANALYSIS SPEED: {isSlowMo ? '33% (SLOW)' : '100% (NORMAL)'}
         </p>
       </div>
       
-      <div className="relative h-72 w-full" key={key}>
-        <svg className="w-full h-full overflow-visible" viewBox="0 0 800 300">
+      <div className="relative w-full aspect-[2.5/1] min-h-[250px]" key={key}>
+        <svg className="w-full h-full overflow-visible" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
           
           <defs>
             <filter id="glowGreen" x="-20%" y="-20%" width="140%" height="140%">
@@ -139,7 +139,7 @@ export const RegretTimeline: React.FC<RegretTimelineProps> = ({ action, regret, 
         </svg>
       </div>
       
-      <div className="bg-gray-100 dark:bg-zinc-900 px-6 py-2 flex justify-between items-center text-xs text-gray-400 font-mono">
+      <div className="bg-gray-100 dark:bg-zinc-900 px-6 py-2 flex justify-between items-center text-[10px] md:text-xs text-gray-400 font-mono">
          <span>SEQUENCE: MISTAKE_DETECTED -> AUTO_CORRECT_INITIATED</span>
       </div>
     </div>

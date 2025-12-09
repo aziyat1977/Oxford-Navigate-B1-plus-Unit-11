@@ -45,16 +45,16 @@ export const DetectiveChat: React.FC = () => {
 
   return (
     <>
-      {/* Floating Button */}
+      {/* Floating Button - Positioned to not block content on mobile */}
       <button 
         onClick={toggleChat}
-        className={`fixed bottom-6 right-6 bg-noir-red text-white p-4 rounded-full shadow-lg hover:bg-red-700 transition-all z-50 ${isOpen ? 'hidden' : 'flex'}`}
+        className={`fixed bottom-4 right-4 md:bottom-6 md:right-6 bg-noir-red text-white p-3 md:p-4 rounded-full shadow-lg hover:bg-red-700 transition-all z-50 ${isOpen ? 'hidden' : 'flex'}`}
       >
         <MessageSquare size={24} />
       </button>
 
       {/* Chat Window */}
-      <div className={`fixed bottom-6 right-6 w-80 md:w-96 bg-noir-paper border border-gray-700 rounded-lg shadow-2xl z-50 flex flex-col transition-all duration-300 transform ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-20 opacity-0 pointer-events-none'}`}>
+      <div className={`fixed bottom-0 right-0 md:bottom-6 md:right-6 w-full md:w-96 h-[50vh] md:h-auto bg-noir-paper border border-gray-700 rounded-t-lg md:rounded-lg shadow-2xl z-50 flex flex-col transition-all duration-300 transform ${isOpen ? 'translate-y-0 opacity-100' : 'translate-y-full md:translate-y-20 opacity-0 pointer-events-none'}`}>
         
         {/* Header */}
         <div className="bg-noir-folder p-3 rounded-t-lg flex justify-between items-center border-b border-gray-600">
@@ -64,13 +64,13 @@ export const DetectiveChat: React.FC = () => {
             </div>
             <span className="font-mono text-noir-tan text-sm font-bold">DETECTIVE AI</span>
           </div>
-          <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white">
+          <button onClick={() => setIsOpen(false)} className="text-gray-400 hover:text-white p-2">
             <X size={18} />
           </button>
         </div>
 
         {/* Messages */}
-        <div className="flex-1 h-80 overflow-y-auto p-4 space-y-4 bg-zinc-950">
+        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-zinc-950 min-h-[250px] md:h-96">
           {messages.map((msg, idx) => (
             <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`max-w-[85%] p-3 rounded text-sm ${
@@ -93,7 +93,7 @@ export const DetectiveChat: React.FC = () => {
         </div>
 
         {/* Input */}
-        <div className="p-3 bg-noir-paper border-t border-gray-700 flex gap-2">
+        <div className="p-3 bg-noir-paper border-t border-gray-700 flex gap-2 pb-safe-bottom">
           <input 
             type="text" 
             value={input}

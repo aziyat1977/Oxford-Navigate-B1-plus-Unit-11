@@ -27,28 +27,28 @@ export const Timeline: React.FC<TimelineProps> = ({ realEvent, unrealEvent, resu
   };
 
   return (
-    <div className="w-full my-12 bg-zinc-950 p-1 rounded-xl border border-zinc-800 shadow-2xl overflow-hidden">
+    <div className="w-full my-8 md:my-12 bg-zinc-950 p-1 rounded-xl border border-zinc-800 shadow-2xl overflow-hidden">
       {/* Header / Controls */}
-      <div className="bg-zinc-900 px-6 py-4 flex justify-between items-center border-b border-zinc-800">
+      <div className="bg-zinc-900 px-4 md:px-6 py-3 md:py-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-zinc-800">
         <div>
-           <h3 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2">
+           <h3 className="text-lg md:text-xl font-black text-white uppercase tracking-wider flex items-center gap-2">
              <span className="w-2 h-6 bg-noir-red inline-block"></span>
              Timeline Divergence
            </h3>
            <p className="text-zinc-500 text-xs font-mono">FORENSIC RECONSTRUCTION</p>
         </div>
         
-        <div className="flex gap-2">
+        <div className="flex flex-wrap gap-2 w-full sm:w-auto">
            <button 
              onClick={toggleSpeed}
-             className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-bold font-mono transition-colors ${isSlowMo ? 'bg-blue-900/30 text-blue-400 border border-blue-500/50' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}`}
+             className={`flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 rounded-md text-xs font-bold font-mono transition-colors ${isSlowMo ? 'bg-blue-900/30 text-blue-400 border border-blue-500/50' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}`}
            >
              <Gauge size={14} />
-             {isSlowMo ? 'ANALYSIS MODE (0.3x)' : 'REALTIME (1.0x)'}
+             <span className="whitespace-nowrap">{isSlowMo ? 'ANALYSIS (0.3x)' : 'REALTIME (1.0x)'}</span>
            </button>
            <button 
              onClick={handleReplay}
-             className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-zinc-800 text-zinc-300 text-xs font-bold font-mono hover:bg-zinc-700 transition-colors"
+             className="flex-1 sm:flex-none flex items-center justify-center gap-2 px-3 py-2 rounded-md bg-zinc-800 text-zinc-300 text-xs font-bold font-mono hover:bg-zinc-700 transition-colors"
            >
              <RotateCcw size={14} /> REPLAY
            </button>
@@ -56,7 +56,7 @@ export const Timeline: React.FC<TimelineProps> = ({ realEvent, unrealEvent, resu
       </div>
       
       {/* Visualization */}
-      <div className="relative h-80 w-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed" key={key}>
+      <div className="relative w-full aspect-[2.5/1] min-h-[250px] bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed" key={key}>
         <svg className="w-full h-full" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid meet">
           
           <defs>
@@ -143,7 +143,7 @@ export const Timeline: React.FC<TimelineProps> = ({ realEvent, unrealEvent, resu
         </svg>
       </div>
 
-      <div className="bg-zinc-900 px-6 py-3 flex justify-between items-center text-xs font-mono text-zinc-500 border-t border-zinc-800">
+      <div className="bg-zinc-900 px-6 py-3 flex justify-between items-center text-[10px] md:text-xs font-mono text-zinc-500 border-t border-zinc-800">
          <span>STATUS: SIMULATION COMPLETE</span>
          <span>UNIT 11.1 // GRAMMAR DEPT</span>
       </div>

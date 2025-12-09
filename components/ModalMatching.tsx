@@ -52,16 +52,16 @@ export const ModalMatching: React.FC = () => {
   };
 
   return (
-    <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-gray-800 rounded-xl p-8 my-10 shadow-lg">
-      <h4 className="text-xl font-black text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-8 text-center">
+    <div className="bg-white dark:bg-zinc-900 border border-gray-200 dark:border-gray-800 rounded-xl p-4 md:p-8 my-10 shadow-lg">
+      <h4 className="text-lg md:text-xl font-black text-gray-800 dark:text-gray-200 uppercase tracking-wide mb-6 md:mb-8 text-center">
         CONNECT THE CONTEXT
       </h4>
 
-      <div className="flex justify-between gap-8 md:gap-16">
+      <div className="flex justify-between gap-2 md:gap-8 lg:gap-16">
         
         {/* Contexts Column */}
-        <div className="flex flex-col gap-4 flex-1">
-          <h5 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 text-center">SITUATION</h5>
+        <div className="flex flex-col gap-3 md:gap-4 flex-1">
+          <h5 className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 text-center">SITUATION</h5>
           {CONTEXTS.map(item => {
             const isMatched = completed.includes(item.id);
             const isSelected = selectedContext === item.id;
@@ -71,7 +71,7 @@ export const ModalMatching: React.FC = () => {
                 onClick={() => handleContextClick(item.id)}
                 disabled={isMatched}
                 className={`
-                  p-4 rounded-lg border-2 text-sm md:text-base font-medium transition-all relative
+                  p-3 md:p-4 rounded-lg border-2 text-xs md:text-base font-medium transition-all relative h-full
                   ${isMatched 
                     ? 'bg-green-50 dark:bg-green-900/20 border-green-500 text-green-700 dark:text-green-400 opacity-50' 
                     : isSelected
@@ -81,20 +81,20 @@ export const ModalMatching: React.FC = () => {
                 `}
               >
                 {item.text}
-                {isSelected && <div className="absolute -right-3 top-1/2 -translate-y-1/2 w-3 h-3 bg-yellow-600 rotate-45"></div>}
+                {isSelected && <div className="absolute -right-2 md:-right-3 top-1/2 -translate-y-1/2 w-2 h-2 md:w-3 md:h-3 bg-yellow-600 rotate-45"></div>}
               </button>
             );
           })}
         </div>
 
         {/* Center Connector */}
-        <div className="flex flex-col justify-center items-center text-gray-300 dark:text-gray-700">
-           <Link2 size={32} />
+        <div className="flex flex-col justify-center items-center text-gray-300 dark:text-gray-700 px-1">
+           <Link2 size={24} className="md:w-8 md:h-8" />
         </div>
 
         {/* Modals Column */}
-        <div className="flex flex-col gap-4 flex-1">
-          <h5 className="text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 text-center">MODAL VERB</h5>
+        <div className="flex flex-col gap-3 md:gap-4 flex-1">
+          <h5 className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest mb-2 text-center">MODAL VERB</h5>
           {MODALS.map(item => {
             // Check if this modal is part of any completed match
             const isMatched = Object.values(matches).includes(item.id);
@@ -104,7 +104,7 @@ export const ModalMatching: React.FC = () => {
                 onClick={() => handleModalClick(item.id)}
                 disabled={isMatched}
                 className={`
-                  p-4 rounded-lg border-2 text-sm md:text-base font-mono font-bold transition-all
+                  p-3 md:p-4 rounded-lg border-2 text-xs md:text-base font-mono font-bold transition-all h-full
                   ${isMatched 
                     ? 'bg-green-50 dark:bg-green-900/20 border-green-500 text-green-700 dark:text-green-400 opacity-50' 
                     : selectedContext
@@ -121,7 +121,7 @@ export const ModalMatching: React.FC = () => {
       </div>
       
       {completed.length === CONTEXTS.length && (
-         <div className="mt-8 text-center text-green-500 font-bold animate-pulse">
+         <div className="mt-8 text-center text-green-500 font-bold animate-pulse text-sm md:text-base">
             ALL CONNECTIONS ESTABLISHED
          </div>
       )}
