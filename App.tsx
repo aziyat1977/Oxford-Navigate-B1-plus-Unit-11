@@ -4,6 +4,7 @@ import { Dashboard } from './pages/Dashboard';
 import { Case11_1 } from './pages/Case11_1';
 import { Case11_2 } from './pages/Case11_2';
 import { Case11_3 } from './pages/Case11_3';
+import { Storybook11_2 } from './pages/Storybook11_2';
 import { DetectiveChat } from './components/DetectiveChat';
 
 const App: React.FC = () => {
@@ -28,21 +29,24 @@ const App: React.FC = () => {
   return (
     <div className="min-h-screen font-sans selection:bg-noir-red selection:text-white bg-gray-100 dark:bg-noir-bg text-gray-900 dark:text-noir-text transition-colors duration-300">
       
-      <Navbar 
-        activePage={page} 
-        setPage={setPage} 
-        isDark={isDark} 
-        toggleTheme={toggleTheme} 
-      />
+      {page !== '11.2-comic' && (
+        <Navbar 
+          activePage={page} 
+          setPage={setPage} 
+          isDark={isDark} 
+          toggleTheme={toggleTheme} 
+        />
+      )}
 
       <main>
         {page === 'home' && <Dashboard onNavigate={setPage} />}
         {page === '11.1' && <Case11_1 />}
-        {page === '11.2' && <Case11_2 />}
+        {page === '11.2' && <Case11_2 onOpenComic={() => setPage('11.2-comic')} />}
         {page === '11.3' && <Case11_3 />}
+        {page === '11.2-comic' && <Storybook11_2 onBack={() => setPage('11.2')} />}
       </main>
 
-      <DetectiveChat />
+      {page !== '11.2-comic' && <DetectiveChat />}
     </div>
   );
 };

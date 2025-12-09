@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
+import { Play, RotateCcw, Gauge } from 'lucide-react';
+import { playSFX } from '../utils/audio';
 
 interface TimelineProps {
   realEvent: string;
@@ -7,88 +9,144 @@ interface TimelineProps {
 }
 
 export const Timeline: React.FC<TimelineProps> = ({ realEvent, unrealEvent, result }) => {
-  const [animate, setAnimate] = useState(false);
+  const [key, setKey] = useState(0);
+  const [isSlowMo, setIsSlowMo] = useState(false);
 
-  useEffect(() => {
-    // Trigger animation on mount
-    setAnimate(true);
-  }, []);
+  // Base duration is 6s. Slow mo is 3x slower (18s)
+  const duration = isSlowMo ? 18 : 6;
+
+  const handleReplay = () => {
+    playSFX('click');
+    setKey(prev => prev + 1);
+  };
+
+  const toggleSpeed = () => {
+    playSFX('click');
+    setIsSlowMo(!isSlowMo);
+    setKey(prev => prev + 1); // Restart on speed change to sync
+  };
 
   return (
-    <div className="w-full my-12 bg-white dark:bg-black p-6 rounded-xl border-2 border-gray-200 dark:border-gray-800 shadow-xl overflow-hidden">
-      <h3 className="text-2xl font-black text-gray-800 dark:text-white mb-6 uppercase tracking-wider">
-        Timeline Analysis
-      </h3>
+    <div className="w-full my-12 bg-zinc-950 p-1 rounded-xl border border-zinc-800 shadow-2xl overflow-hidden">
+      {/* Header / Controls */}
+      <div className="bg-zinc-900 px-6 py-4 flex justify-between items-center border-b border-zinc-800">
+        <div>
+           <h3 className="text-xl font-black text-white uppercase tracking-wider flex items-center gap-2">
+             <span className="w-2 h-6 bg-noir-red inline-block"></span>
+             Timeline Divergence
+           </h3>
+           <p className="text-zinc-500 text-xs font-mono">FORENSIC RECONSTRUCTION</p>
+        </div>
+        
+        <div className="flex gap-2">
+           <button 
+             onClick={toggleSpeed}
+             className={`flex items-center gap-2 px-3 py-1.5 rounded-md text-xs font-bold font-mono transition-colors ${isSlowMo ? 'bg-blue-900/30 text-blue-400 border border-blue-500/50' : 'bg-zinc-800 text-zinc-400 hover:bg-zinc-700'}`}
+           >
+             <Gauge size={14} />
+             {isSlowMo ? 'ANALYSIS MODE (0.3x)' : 'REALTIME (1.0x)'}
+           </button>
+           <button 
+             onClick={handleReplay}
+             className="flex items-center gap-2 px-3 py-1.5 rounded-md bg-zinc-800 text-zinc-300 text-xs font-bold font-mono hover:bg-zinc-700 transition-colors"
+           >
+             <RotateCcw size={14} /> REPLAY
+           </button>
+        </div>
+      </div>
       
-      <div className="relative h-64 w-full">
-        <svg className="w-full h-full" viewBox="0 0 800 300" preserveAspectRatio="xMidYMid meet">
+      {/* Visualization */}
+      <div className="relative h-80 w-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] bg-fixed" key={key}>
+        <svg className="w-full h-full" viewBox="0 0 800 320" preserveAspectRatio="xMidYMid meet">
           
-          {/* Defs for markers */}
           <defs>
-            <marker id="arrow" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto" markerUnits="strokeWidth">
-              <path d="M0,0 L0,6 L9,3 z" fill="#888" />
+            <marker id="arrowGray" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L9,3 z" fill="#3f3f46" />
             </marker>
-            <filter id="glow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="3" result="blur" />
-              <feComposite in="SourceGraphic" in2="blur" operator="over" />
+            <filter id="neonRed" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="2.5" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
             </filter>
+            <filter id="neonGold" x="-50%" y="-50%" width="200%" height="200%">
+              <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+            <linearGradient id="fadeLine" x1="0" y1="0" x2="1" y2="0">
+                <stop offset="0%" stopColor="#3f3f46" stopOpacity="0" />
+                <stop offset="20%" stopColor="#3f3f46" stopOpacity="1" />
+                <stop offset="100%" stopColor="#3f3f46" stopOpacity="1" />
+            </linearGradient>
           </defs>
 
-          {/* REALITY LINE (Faded) */}
-          <line x1="50" y1="150" x2="750" y2="150" stroke="#444" strokeWidth="2" strokeDasharray="10,10" opacity="0.3" markerEnd="url(#arrow)" />
-          <text x="50" y="140" fill="#666" fontSize="14" fontWeight="bold">REALITY</text>
-          
-          <g className="opacity-40">
-            <circle cx="200" cy="150" r="8" fill="#444" />
-            <text x="200" y="180" textAnchor="middle" fill="#666" fontSize="14" className="font-mono">{realEvent}</text>
+          {/* BACKGROUND GRID */}
+          <path d="M50 220 L750 220" stroke="url(#fadeLine)" strokeWidth="1" />
+          <path d="M200 50 L200 280" stroke="#3f3f46" strokeWidth="1" strokeDasharray="4 4" opacity="0.3" />
+
+          {/* REALITY PATH (Bottom) */}
+          <g>
+            <line x1="50" y1="220" x2="750" y2="220" stroke="#52525b" strokeWidth="4" markerEnd="url(#arrowGray)" opacity="0.5" />
+            <text x="50" y="250" fill="#71717a" fontSize="12" fontWeight="bold" fontFamily="monospace">REALITY TRACK</text>
+            
+            {/* The Crash Event */}
+            <circle cx="200" cy="220" r="6" fill="#ef4444">
+                <animate attributeName="r" values="6;10;6" dur="2s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="0.5;1;0.5" dur="2s" repeatCount="indefinite" />
+            </circle>
+            <text x="200" y="250" textAnchor="middle" fill="#ef4444" fontSize="14" fontWeight="bold">{realEvent}</text>
           </g>
 
-          {/* UNREAL CURVE */}
-          {/* Animated Path */}
+          {/* UNREAL PATH (Divergence) */}
+          {/* Path: Starts at Reality (50,220), splits at 200, curves up to (700, 80) */}
           <path 
-            d="M 50 150 Q 200 50 400 150 T 750 150" 
+            d="M 50 220 L 200 220 C 350 220, 400 80, 750 80" 
             fill="none" 
-            stroke="#ff3333" 
+            stroke="#eab308" 
             strokeWidth="4" 
             strokeDasharray="1000"
-            strokeDashoffset={animate ? "0" : "1000"}
-            className="transition-all duration-[4s] ease-in-out"
-            filter="url(#glow)"
-          />
+            strokeDashoffset="1000"
+            filter="url(#neonGold)"
+          >
+            <animate attributeName="stroke-dashoffset" from="1000" to="0" dur={`${duration}s`} fill="freeze" />
+          </path>
 
-          {/* Moving Ball - "Slow Motion" */}
-          <circle r="10" fill="#fff" stroke="#ff3333" strokeWidth="3">
+          {/* Moving Particle representing "Alternative History" */}
+          <circle r="8" fill="#fff" filter="url(#neonGold)">
             <animateMotion 
-              dur="6s" 
-              repeatCount="indefinite"
-              path="M 50 150 Q 200 50 400 150 T 750 150"
-              keyPoints="0;1"
-              keyTimes="0;1"
-              calcMode="linear"
+              dur={`${duration}s`} 
+              path="M 50 220 L 200 220 C 350 220, 400 80, 750 80"
+              fill="freeze"
             />
           </circle>
 
-          {/* Unreal Labels */}
-          <g className={`transition-opacity duration-1000 delay-1000 ${animate ? 'opacity-100' : 'opacity-0'}`}>
-            <text x="200" y="70" textAnchor="middle" fill="#ff3333" fontSize="18" fontWeight="bold" className="uppercase">
-              IF... {unrealEvent}
-            </text>
-             <line x1="200" y1="80" x2="200" y2="150" stroke="#ff3333" strokeWidth="1" strokeDasharray="4,4" opacity="0.5" />
+          {/* LABELS REVEAL */}
+          <g opacity="0">
+             <animate attributeName="opacity" from="0" to="1" begin={`${duration * 0.25}s`} dur="1s" fill="freeze" />
+             <line x1="200" y1="220" x2="200" y2="150" stroke="#eab308" strokeWidth="1" strokeDasharray="4 4" />
+             <text x="210" y="140" fill="#eab308" fontSize="16" fontWeight="bold" fontFamily="monospace">IF {unrealEvent.toUpperCase()}...</text>
           </g>
 
-          <g className={`transition-opacity duration-1000 delay-[3000ms] ${animate ? 'opacity-100' : 'opacity-0'}`}>
-             <text x="550" y="200" textAnchor="middle" fill="#c2b280" fontSize="18" fontWeight="bold" className="uppercase">
-               RESULT: {result}
-             </text>
-             <line x1="550" y1="150" x2="550" y2="180" stroke="#c2b280" strokeWidth="1" strokeDasharray="4,4" opacity="0.5" />
+          <g opacity="0">
+             <animate attributeName="opacity" from="0" to="1" begin={`${duration * 0.8}s`} dur="1s" fill="freeze" />
+             <circle cx="750" cy="80" r="15" stroke="#eab308" strokeWidth="2" fill="none">
+                <animate attributeName="r" values="15;25;15" dur="3s" repeatCount="indefinite" />
+                <animate attributeName="opacity" values="1;0.5;1" dur="3s" repeatCount="indefinite" />
+             </circle>
+             <text x="730" y="50" textAnchor="end" fill="#eab308" fontSize="20" fontWeight="bold" filter="url(#neonGold)">WOULD HAVE {result.toUpperCase()}</text>
           </g>
 
         </svg>
       </div>
-      
-      <p className="text-center text-gray-500 dark:text-gray-400 mt-4 font-mono text-sm">
-        Simulation: Alternate Reality Trajectory
-      </p>
+
+      <div className="bg-zinc-900 px-6 py-3 flex justify-between items-center text-xs font-mono text-zinc-500 border-t border-zinc-800">
+         <span>STATUS: SIMULATION COMPLETE</span>
+         <span>UNIT 11.1 // GRAMMAR DEPT</span>
+      </div>
     </div>
   );
 };

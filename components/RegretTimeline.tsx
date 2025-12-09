@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { RefreshCcw, AlertCircle, CheckCircle } from 'lucide-react';
+import React, { useState } from 'react';
+import { RefreshCcw, Rewind, Play } from 'lucide-react';
+import { playSFX } from '../utils/audio';
 
 interface RegretTimelineProps {
   action: string;
@@ -8,126 +9,138 @@ interface RegretTimelineProps {
 }
 
 export const RegretTimeline: React.FC<RegretTimelineProps> = ({ action, regret, correction }) => {
-  const [replay, setReplay] = useState(0);
+  const [key, setKey] = useState(0);
+  const [isSlowMo, setIsSlowMo] = useState(false);
 
-  useEffect(() => {
-    const timer = setInterval(() => {
-      setReplay(prev => prev + 1);
-    }, 8000); // 8 second loop for "slow motion" feel
-    return () => clearInterval(timer);
-  }, []);
+  // Animation Timings (in seconds)
+  // Normal: Mistake(1s) -> Wait(2s) -> Regret(1s) -> Rewind(2s) -> Correction(1s) = ~7s
+  // SlowMo: 3x slower = ~21s
+  const speedMult = isSlowMo ? 3 : 1;
+
+  const handleReplay = () => {
+    playSFX('click');
+    setKey(prev => prev + 1);
+  };
+
+  const toggleSpeed = () => {
+    playSFX('click');
+    setIsSlowMo(!isSlowMo);
+    setKey(prev => prev + 1);
+  };
 
   return (
-    <div className="w-full my-12 bg-white dark:bg-black p-8 rounded-3xl border-2 border-gray-200 dark:border-gray-800 shadow-2xl overflow-hidden relative group">
-      <div className="flex justify-between items-center mb-8 relative z-10">
+    <div className="w-full my-12 bg-white dark:bg-black p-1 rounded-3xl border-2 border-gray-200 dark:border-gray-800 shadow-2xl overflow-hidden relative group">
+      
+      {/* Controls Header */}
+      <div className="absolute top-4 right-4 z-20 flex gap-2">
+         <button 
+           onClick={toggleSpeed}
+           className="bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 p-2 rounded-full transition-colors"
+           title={isSlowMo ? "Switch to Normal Speed" : "Switch to Slow Motion"}
+         >
+            {isSlowMo ? <Play size={16} /> : <Rewind size={16} />}
+         </button>
+         <button 
+           onClick={handleReplay}
+           className="bg-black/10 dark:bg-white/10 hover:bg-black/20 dark:hover:bg-white/20 p-2 rounded-full transition-colors"
+           title="Replay Simulation"
+         >
+            <RefreshCcw size={16} />
+         </button>
+      </div>
+
+      <div className="p-8 pb-0">
         <h3 className="text-2xl font-black text-gray-900 dark:text-white uppercase tracking-widest flex items-center gap-3">
           <RefreshCcw className="text-noir-tan animate-spin-slow" />
           Time Machine Protocol
         </h3>
-        <span className="bg-gray-100 dark:bg-gray-900 text-gray-500 text-xs font-mono px-3 py-1 rounded-full border border-gray-200 dark:border-gray-700">
-          LOOP_CYCLE: {replay}
-        </span>
+        <p className="text-sm font-mono text-gray-500 mt-2">
+           ANALYSIS SPEED: {isSlowMo ? '33% (SLOW)' : '100% (NORMAL)'}
+        </p>
       </div>
       
-      <div className="relative h-64 w-full" key={replay}>
-        <svg className="w-full h-full overflow-visible" viewBox="0 0 800 250">
+      <div className="relative h-72 w-full" key={key}>
+        <svg className="w-full h-full overflow-visible" viewBox="0 0 800 300">
           
           <defs>
-            <marker id="arrowHead" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-              <polygon points="0 0, 10 3.5, 0 7" fill="#666" />
-            </marker>
-            <marker id="redArrow" markerWidth="10" markerHeight="7" refX="10" refY="3.5" orient="auto">
-              <polygon points="0 0, 10 3.5, 0 7" fill="#ff3333" />
-            </marker>
-            <filter id="neonGlow" x="-20%" y="-20%" width="140%" height="140%">
-              <feGaussianBlur stdDeviation="2" result="blur" />
+            <filter id="glowGreen" x="-20%" y="-20%" width="140%" height="140%">
+              <feGaussianBlur stdDeviation="3" result="blur" />
               <feComposite in="SourceGraphic" in2="blur" operator="over" />
             </filter>
+            <marker id="arrowRed" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+              <path d="M0,0 L0,6 L9,3 z" fill="#ef4444" />
+            </marker>
           </defs>
 
           {/* BASE TIMELINE */}
-          <line x1="50" y1="150" x2="750" y2="150" stroke="#333" strokeWidth="2" markerEnd="url(#arrowHead)" opacity="0.3" />
+          <line x1="50" y1="200" x2="750" y2="200" stroke="#52525b" strokeWidth="2" strokeOpacity="0.3" />
           
-          {/* PAST MARKER */}
-          <line x1="150" y1="140" x2="150" y2="160" stroke="#666" strokeWidth="2" />
-          <text x="150" y="180" textAnchor="middle" fill="#666" fontSize="12" fontFamily="monospace" fontWeight="bold">PAST</text>
-
-          {/* PRESENT MARKER */}
-          <line x1="650" y1="140" x2="650" y2="160" stroke="#666" strokeWidth="2" />
-          <text x="650" y="180" textAnchor="middle" fill="#666" fontSize="12" fontFamily="monospace" fontWeight="bold">PRESENT (NOW)</text>
-
-          {/* ANIMATION STAGE 1: THE MISTAKE (Red Square) */}
+          {/* T1: THE MISTAKE */}
           <g>
-            <rect x="140" y="140" width="20" height="20" fill="#ff3333" opacity="0" transform="translate(-10, -10)">
-               <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="0.5s" fill="freeze" />
-               <animateTransform attributeName="transform" type="scale" from="0" to="1" dur="0.5s" begin="0.5s" fill="freeze" additive="sum" />
-            </rect>
-            <text x="150" y="120" textAnchor="middle" fill="#ff3333" fontSize="16" fontWeight="bold" opacity="0" fontFamily="monospace">
-              <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="0.8s" fill="freeze" />
-              "{action}"
-            </text>
+             {/* The square that appears first (Red) */}
+             <rect x="140" y="190" width="20" height="20" fill="#ef4444" opacity="1">
+                <animate attributeName="opacity" values="0;1;0" keyTimes="0;0.1;0.9" dur={`${7 * speedMult}s`} fill="freeze" />
+             </rect>
+             <text x="150" y="170" textAnchor="middle" fill="#ef4444" fontSize="14" fontWeight="bold" opacity="1">
+                <animate attributeName="opacity" values="0;1;0" keyTimes="0;0.1;0.9" dur={`${7 * speedMult}s`} fill="freeze" />
+                {action}
+             </text>
           </g>
 
-          {/* ANIMATION STAGE 2: TIME PASSES (Red Line moving forward) */}
-          <path d="M 150 150 L 650 150" stroke="#ff3333" strokeWidth="4" fill="none" strokeDasharray="500" strokeDashoffset="500" opacity="0.5">
-            <animate attributeName="stroke-dashoffset" from="500" to="0" dur="2s" begin="1.5s" fill="freeze" />
-          </path>
+          {/* TIME PROGRESS BAR */}
+          <line x1="150" y1="200" x2="650" y2="200" stroke="#ef4444" strokeWidth="4" strokeDasharray="500" strokeDashoffset="500">
+             <animate attributeName="stroke-dashoffset" from="500" to="0" begin={`${0.5 * speedMult}s`} dur={`${2 * speedMult}s`} fill="freeze" />
+             <animate attributeName="opacity" values="1;0" begin={`${4 * speedMult}s`} dur="0.5s" fill="freeze" />
+          </line>
 
-          {/* ANIMATION STAGE 3: THE REGRET (Pulse at Present) */}
-          <circle cx="650" cy="150" r="5" fill="none" stroke="#c2b280" strokeWidth="2" opacity="0">
-             <animate attributeName="opacity" values="0;1;0" dur="1s" begin="3.5s" repeatCount="1" />
-             <animate attributeName="r" values="5;30" dur="1s" begin="3.5s" repeatCount="1" />
-          </circle>
-          <text x="650" y="120" textAnchor="middle" fill="#c2b280" fontSize="14" fontWeight="bold" opacity="0">
-             <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="3.5s" fill="freeze" />
-             {regret}
-          </text>
+          {/* T2: THE REGRET */}
+          <g opacity="0">
+             <animate attributeName="opacity" from="0" to="1" begin={`${2.5 * speedMult}s`} dur="0.5s" fill="freeze" />
+             <animate attributeName="opacity" from="1" to="0" begin={`${4 * speedMult}s`} dur="0.5s" fill="freeze" />
+             
+             <circle cx="650" cy="200" r="8" fill="#eab308" />
+             <text x="650" y="170" textAnchor="middle" fill="#eab308" fontSize="14" fontWeight="bold">"{regret}"</text>
+          </g>
 
-          {/* ANIMATION STAGE 4: THE CORRECTION (Rewind Arc) */}
-          <path d="M 650 150 Q 400 50 150 150" fill="none" stroke="#c2b280" strokeWidth="3" strokeDasharray="10,10" opacity="0">
-             <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="4.5s" fill="freeze" />
-             <animate attributeName="stroke-dashoffset" from="1000" to="0" dur="2s" begin="4.5s" fill="freeze" />
+          {/* THE REWIND ACTION */}
+          {/* An arc going backwards from 650 to 150 */}
+          <path 
+            d="M 650 200 Q 400 50 150 200" 
+            fill="none" 
+            stroke="#10b981" 
+            strokeWidth="3" 
+            strokeDasharray="1000" 
+            strokeDashoffset="1000"
+            filter="url(#glowGreen)"
+          >
+             <animate attributeName="stroke-dashoffset" from="1000" to="0" begin={`${4 * speedMult}s`} dur={`${1.5 * speedMult}s`} fill="freeze" />
           </path>
           
-          {/* Moving Particle on Arc */}
-          <circle r="6" fill="#c2b280">
-            <animateMotion 
-               dur="1.5s" 
-               begin="4.5s"
-               path="M 650 150 Q 400 50 150 150"
-               rotate="auto"
-               fill="freeze"
-            />
-            <animate attributeName="opacity" values="0;1;0" dur="1.5s" begin="4.5s" fill="freeze" />
-          </circle>
+          <text x="400" y="100" textAnchor="middle" fill="#10b981" fontSize="12" fontWeight="bold" letterSpacing="0.2em" opacity="0">
+             <animate attributeName="opacity" values="0;1;0" begin={`${4 * speedMult}s`} dur={`${1.5 * speedMult}s`} />
+             REWINDING...
+          </text>
 
-          {/* ANIMATION STAGE 5: THE IDEAL (Green Overlay) */}
-          <g>
-            <circle cx="150" cy="150" r="25" fill="#10b981" opacity="0">
-               <animate attributeName="opacity" from="0" to="1" dur="0.5s" begin="6s" fill="freeze" />
-            </circle>
-            <path d="M140 150 L148 158 L160 142" stroke="white" strokeWidth="4" fill="none" opacity="0">
-               <animate attributeName="opacity" from="0" to="1" dur="0.3s" begin="6.2s" fill="freeze" />
-               <animate attributeName="stroke-dasharray" values="0,100;100,0" dur="0.5s" begin="6.2s" fill="freeze" />
-            </path>
-            
-            {/* Final Text */}
-            <text x="400" y="50" textAnchor="middle" fill="#10b981" fontSize="24" fontWeight="bold" opacity="0" filter="url(#neonGlow)">
-               <animate attributeName="opacity" from="0" to="1" dur="1s" begin="6.5s" fill="freeze" />
-               {correction}
-            </text>
+          {/* T3: THE CORRECTION (Transformation) */}
+          <g opacity="0">
+             <animate attributeName="opacity" from="0" to="1" begin={`${5.5 * speedMult}s`} dur="0.5s" fill="freeze" />
+             
+             {/* Green Circle replaces Red Square */}
+             <circle cx="150" cy="200" r="12" fill="#10b981" filter="url(#glowGreen)">
+                <animate attributeName="r" values="0;15;12" begin={`${5.5 * speedMult}s`} dur="0.5s" fill="freeze" />
+             </circle>
+             
+             <text x="150" y="140" textAnchor="start" fill="#10b981" fontSize="18" fontWeight="black" filter="url(#glowGreen)">
+                BETTER: {correction}
+             </text>
+             <path d="M 150 200 L 170 150" stroke="#10b981" strokeWidth="1" />
           </g>
 
         </svg>
       </div>
-
-      <div className="absolute bottom-4 right-6 flex gap-4 text-xs font-mono text-gray-400">
-        <div className="flex items-center gap-1">
-          <div className="w-3 h-3 bg-red-500 rounded-sm"></div> Reality
-        </div>
-        <div className="flex items-center gap-1">
-          <div className="w-3 h-3 bg-emerald-500 rounded-full"></div> Ideal (Should have)
-        </div>
+      
+      <div className="bg-gray-100 dark:bg-zinc-900 px-6 py-2 flex justify-between items-center text-xs text-gray-400 font-mono">
+         <span>SEQUENCE: MISTAKE_DETECTED -> AUTO_CORRECT_INITIATED</span>
       </div>
     </div>
   );

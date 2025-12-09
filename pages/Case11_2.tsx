@@ -1,12 +1,16 @@
 import React from 'react';
 import { CaseFile } from '../components/CaseFile';
-import { FileText, Smartphone, AlertTriangle } from 'lucide-react';
+import { FileText, Smartphone, AlertTriangle, BookOpen } from 'lucide-react';
 import { LessonPlanDisplay } from '../components/LessonPlanDisplay';
 import { LESSON_PLANS } from '../data/lessonPlans';
 import { RegretTimeline } from '../components/RegretTimeline';
 import { FillBlanks } from '../components/FillBlanks';
 
-export const Case11_2: React.FC = () => {
+interface Case11_2Props {
+  onOpenComic?: () => void;
+}
+
+export const Case11_2: React.FC<Case11_2Props> = ({ onOpenComic }) => {
   const lessonData = LESSON_PLANS.find(l => l.unit === "11.2");
 
   return (
@@ -26,9 +30,18 @@ export const Case11_2: React.FC = () => {
               </div>
               <div>
                 <h3 className="text-3xl font-black text-gray-900 dark:text-white uppercase mb-2">The "Send" Button Incident</h3>
-                <p className="text-xl text-gray-600 dark:text-gray-400">
+                <p className="text-xl text-gray-600 dark:text-gray-400 mb-6">
                   One in four agents <span className="text-noir-red font-bold underline decoration-wavy">regret</span> their digital communications instantly.
                 </p>
+                {onOpenComic && (
+                  <button 
+                    onClick={onOpenComic}
+                    className="flex items-center gap-2 bg-noir-tan text-black px-6 py-3 rounded-lg font-bold uppercase hover:bg-yellow-600 transition-colors shadow-lg"
+                  >
+                    <BookOpen size={20} />
+                    Open Visual Evidence (Comic Strip)
+                  </button>
+                )}
               </div>
             </div>
 
