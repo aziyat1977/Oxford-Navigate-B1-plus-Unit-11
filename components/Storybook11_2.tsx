@@ -44,7 +44,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       color:var(--ink);
     }
     .book {
-      max-width: 980px;
+      max-width: 100%;
       margin: 0 auto;
       padding: 18px;
     }
@@ -53,10 +53,11 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       border: var(--border);
       border-radius: 18px;
       padding: 16px;
-      margin: 16px 0 28px;
+      margin: 16px auto 28px;
       box-shadow: 0 18px 0 rgba(18,18,18,.08);
       position: relative;
       overflow: hidden;
+      max-width: 1000px;
     }
     .page:before {
       content:"";
@@ -81,9 +82,12 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
     }
     .cover {
       display:grid;
-      grid-template-columns: 1.2fr .8fr;
+      grid-template-columns: 1fr;
       gap: 14px;
       align-items: stretch;
+    }
+    @media (min-width: 768px) {
+      .cover { grid-template-columns: 1.2fr .8fr; }
     }
     .cover h1 {
       margin: 0 0 10px;
@@ -115,8 +119,11 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
     }
     .grid {
       display:grid;
-      grid-template-columns: repeat(2, 1fr);
+      grid-template-columns: 1fr;
       gap: 12px;
+    }
+    @media (min-width: 640px) {
+      .grid { grid-template-columns: repeat(2, 1fr); }
     }
     .panel {
       background: rgba(255,255,255,.92);
@@ -127,6 +134,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       position: relative;
       overflow: hidden;
     }
+    .panel svg { width: 100%; height: auto; max-height: 300px; display: block; margin: 0 auto; }
     .panel .caption {
       position:absolute;
       left: 10px;
@@ -152,6 +160,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       font-weight: 700;
       line-height: 1.25;
       box-shadow: 0 8px 0 rgba(18,18,18,.10);
+      z-index: 5;
     }
     .bubble:after {
       content:"";
@@ -198,10 +207,9 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
     @media (max-width: 640px) {
       .book { padding: 12px; }
       .page { padding: 12px; margin: 12px 0 24px; }
-      .cover { grid-template-columns: 1fr; }
-      .grid { grid-template-columns: 1fr; }
-      .panel { min-height: 200px; }
+      .panel { min-height: 280px; } /* Taller panels on mobile for stacking */
       .cover h1 { font-size: 28px; }
+      .panel .caption { position: static; margin-top: 10px; }
     }
 
     /* print */
@@ -226,7 +234,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
           <p class="note">Comic layout with original text embedded verbatim.</p>
         </div>
         <div class="art" aria-label="Cover art">
-          <svg viewBox="0 0 420 260" width="100%" height="100%" role="img" aria-label="Send button cover cartoon">
+          <svg viewBox="0 0 420 260" role="img" aria-label="Send button cover cartoon">
             <defs>
               <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
                 <feDropShadow dx="0" dy="6" stdDeviation="0" flood-color="#121212" flood-opacity=".22"/>
@@ -255,7 +263,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       <div class="grid">
         <div class="panel">
           <div class="bubble">Online chat vs. face-to-face</div>
-          <svg viewBox="0 0 420 260" width="100%" height="100%" role="img" aria-label="Online vs face-to-face cartoon">
+          <svg viewBox="0 0 420 260" role="img" aria-label="Online vs face-to-face cartoon">
             <rect x="12" y="18" width="185" height="220" rx="16" fill="rgba(59,130,246,.12)" stroke="#121212" stroke-width="6"/>
             <rect x="223" y="18" width="185" height="220" rx="16" fill="rgba(255,176,0,.14)" stroke="#121212" stroke-width="6"/>
             <!-- phone -->
@@ -279,7 +287,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
 
         <div class="panel">
           <div class="bubble small">The keyboard is faster than the brain.</div>
-          <svg viewBox="0 0 420 260" width="100%" height="100%" role="img" aria-label="Typing and reactions cartoon">
+          <svg viewBox="0 0 420 260" role="img" aria-label="Typing and reactions cartoon">
             <rect x="24" y="24" width="372" height="212" rx="18" fill="rgba(18,18,18,.04)" stroke="#121212" stroke-width="6"/>
             <!-- laptop -->
             <rect x="78" y="70" width="170" height="92" rx="12" fill="#fff" stroke="#121212" stroke-width="6"/>
@@ -302,7 +310,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       <div class="grid">
         <div class="panel wide">
           <div class="bubble">“Stand up for what you believe in” — but…</div>
-          <svg viewBox="0 0 900 260" width="100%" height="100%" role="img" aria-label="Beliefs and send button cartoon">
+          <svg viewBox="0 0 900 260" role="img" aria-label="Beliefs and send button cartoon">
             <rect x="16" y="16" width="868" height="228" rx="18" fill="rgba(59,130,246,.10)" stroke="#121212" stroke-width="6"/>
             <!-- person with megaphone -->
             <circle cx="140" cy="90" r="28" fill="#fff" stroke="#121212" stroke-width="6"/>
@@ -333,7 +341,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       <div class="grid">
         <div class="panel">
           <div class="bubble">55%: “Online replaced face-to-face”</div>
-          <svg viewBox="0 0 420 260" width="100%" height="100%" role="img" aria-label="55 percent cartoon">
+          <svg viewBox="0 0 420 260" role="img" aria-label="55 percent cartoon">
             <rect x="18" y="18" width="384" height="224" rx="18" fill="rgba(255,176,0,.14)" stroke="#121212" stroke-width="6"/>
             <circle cx="120" cy="110" r="26" fill="#fff" stroke="#121212" stroke-width="6"/>
             <circle cx="260" cy="110" r="26" fill="#fff" stroke="#121212" stroke-width="6"/>
@@ -349,7 +357,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
         </div>
         <div class="panel">
           <div class="bubble">39%: speaking up (and 44% felt it mattered)</div>
-          <svg viewBox="0 0 420 260" width="100%" height="100%" role="img" aria-label="39 and 44 percent cartoon">
+          <svg viewBox="0 0 420 260" role="img" aria-label="39 and 44 percent cartoon">
             <rect x="18" y="18" width="384" height="224" rx="18" fill="rgba(59,130,246,.12)" stroke="#121212" stroke-width="6"/>
             <circle cx="120" cy="100" r="26" fill="#fff" stroke="#121212" stroke-width="6"/>
             <polygon points="150,104 220,86 220,122" fill="#fff" stroke="#121212" stroke-width="6"/>
@@ -374,7 +382,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       <div class="grid">
         <div class="panel wide">
           <div class="bubble">Stats spill into real life</div>
-          <svg viewBox="0 0 900 260" width="100%" height="100%" role="img" aria-label="Social media effects cartoon">
+          <svg viewBox="0 0 900 260" role="img" aria-label="Social media effects cartoon">
             <rect x="16" y="16" width="868" height="228" rx="18" fill="rgba(18,18,18,.03)" stroke="#121212" stroke-width="6"/>
             <!-- feed -->
             <rect x="60" y="52" width="260" height="170" rx="16" fill="#fff" stroke="#121212" stroke-width="6"/>
@@ -406,7 +414,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       <div class="grid">
         <div class="panel">
           <div class="bubble">The “would you say this to their face?” test</div>
-          <svg viewBox="0 0 420 260" width="100%" height="100%" role="img" aria-label="Nasty message cartoon">
+          <svg viewBox="0 0 420 260" role="img" aria-label="Nasty message cartoon">
             <rect x="18" y="18" width="384" height="224" rx="18" fill="rgba(255,176,0,.12)" stroke="#121212" stroke-width="6"/>
             <rect x="62" y="58" width="160" height="140" rx="16" fill="#fff" stroke="#121212" stroke-width="6"/>
             <text x="86" y="108" font-size="18" font-family="Arial" font-weight="900" fill="#121212">post</text>
@@ -421,7 +429,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
         </div>
         <div class="panel">
           <div class="bubble">26% admitted it.</div>
-          <svg viewBox="0 0 420 260" width="100%" height="100%" role="img" aria-label="26 percent badge cartoon">
+          <svg viewBox="0 0 420 260" role="img" aria-label="26 percent badge cartoon">
             <rect x="18" y="18" width="384" height="224" rx="18" fill="rgba(59,130,246,.10)" stroke="#121212" stroke-width="6"/>
             <circle cx="210" cy="130" r="78" fill="#fff" stroke="#121212" stroke-width="8"/>
             <text x="175" y="145" font-size="44" font-family="Arial" font-weight="900" fill="#121212">26%</text>
@@ -441,7 +449,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       <div class="grid">
         <div class="panel">
           <div class="bubble">Regret reasons</div>
-          <svg viewBox="0 0 420 260" width="100%" height="100%" role="img" aria-label="44 and 27 percent reasons cartoon">
+          <svg viewBox="0 0 420 260" role="img" aria-label="44 and 27 percent reasons cartoon">
             <rect x="18" y="18" width="384" height="224" rx="18" fill="rgba(255,176,0,.10)" stroke="#121212" stroke-width="6"/>
             <rect x="48" y="52" width="150" height="86" rx="16" fill="#fff" stroke="#121212" stroke-width="6"/>
             <text x="74" y="104" font-size="26" font-family="Arial" font-weight="900" fill="#121212">44%</text>
@@ -456,7 +464,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
         </div>
         <div class="panel">
           <div class="bubble small">A message goes out… and you can’t “un-send” feelings.</div>
-          <svg viewBox="0 0 420 260" width="100%" height="100%" role="img" aria-label="Message sent cartoon">
+          <svg viewBox="0 0 420 260" role="img" aria-label="Message sent cartoon">
             <rect x="18" y="18" width="384" height="224" rx="18" fill="rgba(18,18,18,.03)" stroke="#121212" stroke-width="6"/>
             <rect x="54" y="70" width="150" height="120" rx="16" fill="#fff" stroke="#121212" stroke-width="6"/>
             <polygon points="68,84 129,128 190,84" fill="rgba(59,130,246,.14)" stroke="#121212" stroke-width="6"/>
@@ -478,7 +486,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       <div class="grid">
         <div class="panel wide">
           <div class="bubble">Online bullying: seen or experienced</div>
-          <svg viewBox="0 0 900 260" width="100%" height="100%" role="img" aria-label="Online bullying cartoon">
+          <svg viewBox="0 0 900 260" role="img" aria-label="Online bullying cartoon">
             <rect x="16" y="16" width="868" height="228" rx="18" fill="rgba(59,130,246,.10)" stroke="#121212" stroke-width="6"/>
             <!-- chat cloud -->
             <rect x="60" y="52" width="360" height="130" rx="18" fill="#fff" stroke="#121212" stroke-width="6"/>
@@ -504,7 +512,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       <div class="grid">
         <div class="panel wide">
           <div class="bubble">Professor Adrian Dunbar explains why regret happens</div>
-          <svg viewBox="0 0 900 260" width="100%" height="100%" role="img" aria-label="Professor quote cartoon">
+          <svg viewBox="0 0 900 260" role="img" aria-label="Professor quote cartoon">
             <rect x="16" y="16" width="868" height="228" rx="18" fill="rgba(255,176,0,.10)" stroke="#121212" stroke-width="6"/>
             <!-- professor -->
             <circle cx="120" cy="110" r="30" fill="#fff" stroke="#121212" stroke-width="6"/>
@@ -555,7 +563,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
       <div className="bg-black p-4 flex flex-col sm:flex-row justify-between items-center gap-4 shadow-lg border-b border-gray-800">
         <button 
           onClick={onBack} 
-          className="text-white flex items-center gap-2 hover:text-noir-red transition-colors px-4 py-2 rounded-lg hover:bg-white/10 w-full sm:w-auto justify-center sm:justify-start"
+          className="text-white flex items-center gap-2 hover:text-noir-red transition-colors px-4 py-2 rounded-lg hover:bg-white/10 w-full sm:w-auto justify-center sm:justify-start touch-manipulation"
         >
           <ArrowLeft size={20} /> <span className="font-mono font-bold">BACK TO CASE FILE</span>
         </button>
@@ -565,7 +573,7 @@ export const Storybook11_2: React.FC<StorybookProps> = ({ onBack }) => {
               const iframe = document.getElementById('storybook-frame') as HTMLIFrameElement;
               iframe?.contentWindow?.print();
            }}
-           className="text-white flex items-center gap-2 hover:text-noir-tan transition-colors px-4 py-2 rounded-lg hover:bg-white/10 w-full sm:w-auto justify-center sm:justify-start"
+           className="text-white flex items-center gap-2 hover:text-noir-tan transition-colors px-4 py-2 rounded-lg hover:bg-white/10 w-full sm:w-auto justify-center sm:justify-start touch-manipulation"
         >
           <Printer size={20} /> <span className="font-mono font-bold">PRINT EVIDENCE</span>
         </button>

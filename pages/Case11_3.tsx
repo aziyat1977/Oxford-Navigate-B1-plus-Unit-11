@@ -16,7 +16,7 @@ export const Case11_3: React.FC<CaseProps> = ({ onStartQuiz = () => {} }) => {
   const lessonData = LESSON_PLANS.find(l => l.unit === "11.3");
 
   return (
-    <div className="container mx-auto px-4 pt-24 pb-20">
+    <div className="container mx-auto px-2 md:px-4 pt-20 md:pt-24 pb-20">
        <CaseFile
          id="11.3"
          title="Decryption: Double Meanings"
@@ -26,36 +26,36 @@ export const Case11_3: React.FC<CaseProps> = ({ onStartQuiz = () => {} }) => {
           <div className="space-y-12">
             
             {/* INTRO */}
-            <div className="bg-gray-100 dark:bg-zinc-900 p-8 rounded-3xl border border-gray-200 dark:border-gray-800">
+            <div className="bg-gray-100 dark:bg-zinc-900 p-6 md:p-8 rounded-3xl border border-gray-200 dark:border-gray-800">
                <div className="flex items-center gap-4 mb-4">
                   <div className="bg-noir-red text-white p-3 rounded-full">
                      <Headphones size={32} />
                   </div>
-                  <h3 className="text-2xl font-black text-gray-900 dark:text-white uppercase">Mission Objective</h3>
+                  <h3 className="text-xl md:text-2xl font-black text-gray-900 dark:text-white uppercase">Mission Objective</h3>
                </div>
-               <p className="text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
+               <p className="text-base md:text-lg text-gray-700 dark:text-gray-300 leading-relaxed">
                   We have intercepted corrupted audio files and coded messages. 
                   Your task is to <span className="font-bold text-noir-red">unlock the code</span> by identifying hidden modal verbs and decoding words with double identities.
                </p>
             </div>
 
             {/* PART 1: AUDIO DECRYPTOR (Listening Skills) */}
-            <div className="border-t-4 border-gray-200 dark:border-gray-800 pt-8">
-               <h3 className="text-3xl font-black text-gray-900 dark:text-white mb-2 flex items-center gap-3">
-                 <Headphones className="text-noir-tan" />
-                 UNLOCK THE CODE
+            <div className="border-t-4 border-gray-200 dark:border-gray-800 pt-8 md:pt-12">
+               <h3 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white mb-2 flex items-center gap-3">
+                 <Headphones className="text-noir-tan flex-shrink-0" />
+                 <span>UNLOCK THE CODE</span>
                </h3>
-               <p className="text-gray-500 font-mono text-sm mb-6 uppercase tracking-wider">
+               <p className="text-gray-500 font-mono text-xs md:text-sm mb-6 uppercase tracking-wider">
                   Skill: Hearing Modal Verbs in Fast Speech
                </p>
                
                <AudioDecryptor />
                
                {/* NEW EXERCISE */}
-               <div className="mt-8">
+               <div className="mt-8 md:mt-12">
                  <div className="flex items-center gap-2 mb-4">
                     <Link className="text-noir-red" />
-                    <h4 className="font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300">Target Practice: Matching</h4>
+                    <h4 className="font-bold uppercase tracking-wider text-gray-700 dark:text-gray-300 text-sm md:text-base">Target Practice: Matching</h4>
                  </div>
                  <ModalMatching />
                </div>
@@ -69,12 +69,12 @@ export const Case11_3: React.FC<CaseProps> = ({ onStartQuiz = () => {} }) => {
             </div>
 
             {/* PART 2: POLYSEMY GRID (Vocabulary) */}
-            <div className="border-t-4 border-gray-200 dark:border-gray-800 pt-12">
-               <h3 className="text-3xl font-black text-gray-900 dark:text-white mb-2 flex items-center gap-3">
-                 <VenetianMask className="text-noir-red" />
-                 DOUBLE AGENTS
+            <div className="border-t-4 border-gray-200 dark:border-gray-800 pt-8 md:pt-12">
+               <h3 className="text-2xl md:text-3xl font-black text-gray-900 dark:text-white mb-2 flex items-center gap-3">
+                 <VenetianMask className="text-noir-red flex-shrink-0" />
+                 <span>DOUBLE AGENTS</span>
                </h3>
-               <p className="text-gray-500 font-mono text-sm mb-8 uppercase tracking-wider">
+               <p className="text-gray-500 font-mono text-xs md:text-sm mb-8 uppercase tracking-wider">
                   Skill: Words with Multiple Meanings (Polysemy)
                </p>
 

@@ -35,13 +35,13 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
     <div className="min-h-screen bg-white dark:bg-noir-bg pb-20 transition-colors duration-300">
       <Hero />
       
-      <div className="container mx-auto px-4 md:px-6 -mt-20 md:-mt-32 relative z-20">
-        <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6 md:gap-10">
+      <div className="container mx-auto px-4 sm:px-6 md:px-8 -mt-16 md:-mt-24 relative z-20">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 md:gap-8">
           {cases.map((item) => (
             <div 
               key={item.id}
               onClick={() => onNavigate(item.id)}
-              className="bg-white dark:bg-noir-paper border-2 border-gray-100 dark:border-gray-800 p-6 md:p-10 rounded-3xl shadow-xl md:shadow-2xl hover:border-noir-red hover:-translate-y-2 md:hover:-translate-y-4 transition-all duration-300 cursor-pointer group flex flex-col"
+              className="bg-white dark:bg-noir-paper border-2 border-gray-100 dark:border-gray-800 p-6 md:p-8 lg:p-10 rounded-3xl shadow-xl md:shadow-2xl hover:border-noir-red hover:-translate-y-2 md:hover:-translate-y-4 transition-all duration-300 cursor-pointer group flex flex-col"
             >
               <div className="flex justify-between items-start mb-6 md:mb-8">
                 <div className="p-3 md:p-4 bg-gray-50 dark:bg-black rounded-2xl border border-gray-200 dark:border-gray-700 group-hover:scale-110 transition-transform">
@@ -61,11 +61,11 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
               <p className="text-noir-tan font-mono text-xs md:text-sm font-bold mb-4 md:mb-6 uppercase tracking-wider">
                 {item.subtitle}
               </p>
-              <p className="text-lg md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-6 md:mb-8 flex-grow">
+              <p className="text-base md:text-xl text-gray-600 dark:text-gray-400 leading-relaxed mb-6 md:mb-8 flex-grow">
                 {item.desc}
               </p>
               
-              <div className="flex items-center gap-3 text-base md:text-lg font-black font-mono text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors mt-auto">
+              <div className="flex items-center gap-3 text-sm md:text-lg font-black font-mono text-gray-400 group-hover:text-gray-900 dark:group-hover:text-white transition-colors mt-auto">
                 ACCESS MODULE <ArrowRight size={20} className="group-hover:translate-x-2 transition-transform" />
               </div>
             </div>
@@ -73,7 +73,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onNavigate }) => {
         </div>
       </div>
 
-      <div className="text-center mt-12 md:mt-24 text-gray-500 font-mono text-xs md:text-sm font-bold tracking-widest px-4">
+      <div className="text-center mt-12 md:mt-24 text-gray-500 font-mono text-xs md:text-sm font-bold tracking-widest px-4 pb-8">
         <p>SELECT A FILE TO BEGIN INVESTIGATION</p>
       </div>
     </div>

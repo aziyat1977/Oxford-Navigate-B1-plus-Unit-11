@@ -2,7 +2,7 @@
 <html lang="en" class="dark">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
     <title>Unit 11: Learning Platform</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Courier+Prime:wght@400;700&family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
@@ -41,14 +41,26 @@
                 '0%, 100%': { transform: 'translateY(0)' },
                 '50%': { transform: 'translateY(-10px)' },
               }
+            },
+            screens: {
+              'xs': '475px',
+              '3xl': '1920px', // Smart boards
             }
           }
         }
       }
     </script>
     <style>
+      :root {
+        --sat: env(safe-area-inset-top);
+        --sab: env(safe-area-inset-bottom);
+        --sal: env(safe-area-inset-left);
+        --sar: env(safe-area-inset-right);
+      }
       body {
         transition: background-color 0.3s ease, color 0.3s ease;
+        touch-action: manipulation; /* Improves touch response */
+        -webkit-tap-highlight-color: transparent;
       }
       .dark body {
         background-color: #0a0a0a;
@@ -67,17 +79,25 @@
       }
       /* Custom Scrollbar */
       ::-webkit-scrollbar {
-        width: 10px;
+        width: 8px;
+        height: 8px;
       }
       ::-webkit-scrollbar-track {
         background: transparent;
       }
       ::-webkit-scrollbar-thumb {
-        background: #888;
-        border-radius: 5px;
+        background: #555;
+        border-radius: 4px;
       }
       ::-webkit-scrollbar-thumb:hover {
-        background: #555;
+        background: #777;
+      }
+      /* Utility for full height on mobile */
+      .h-dvh {
+        height: 100dvh;
+      }
+      .min-h-dvh {
+        min-height: 100dvh;
       }
     </style>
   <script type="importmap">

@@ -78,32 +78,32 @@ export const DragDropSentence: React.FC = () => {
         <h4 className="text-lg md:text-xl font-black text-gray-800 dark:text-gray-200 uppercase tracking-wide">
           EVIDENCE RECONSTRUCTION
         </h4>
-        <button onClick={reset} className="text-gray-400 hover:text-noir-red transition-colors p-2">
-          <RefreshCw size={20} />
+        <button onClick={reset} className="text-gray-400 hover:text-noir-red transition-colors p-3 touch-manipulation">
+          <RefreshCw size={24} />
         </button>
       </div>
 
       <p className="text-gray-500 mb-6 font-mono text-xs md:text-sm">
-        Click words to place them into the timeline gaps.
+        Tap words to move them into the timeline gaps.
       </p>
 
       {/* Sentence Structure */}
-      <div className="flex flex-wrap items-center justify-center gap-3 text-base md:text-2xl font-mono text-gray-800 dark:text-gray-300 mb-8 p-4 md:p-6 bg-gray-50 dark:bg-black rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
+      <div className="flex flex-wrap items-center justify-center gap-x-2 gap-y-4 text-base md:text-2xl font-mono text-gray-800 dark:text-gray-300 mb-8 p-4 md:p-6 bg-gray-50 dark:bg-black rounded-xl border border-dashed border-gray-300 dark:border-gray-700">
         <span className="py-2">If he</span>
         
         {/* Slot 1 */}
         <button
           onClick={() => handleSlotClick(1)}
-          className={`min-w-[120px] md:min-w-[150px] px-3 md:px-4 py-2 rounded border-2 border-b-4 transition-all text-sm md:text-base
+          className={`min-w-[140px] px-3 py-3 rounded-lg border-2 border-b-4 transition-all text-sm md:text-base font-bold touch-manipulation
             ${slot1 
               ? 'bg-noir-tan text-black border-yellow-700' 
-              : 'bg-gray-200 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-transparent'
+              : 'bg-gray-200 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-600 border-dashed'
             }
-            ${status === 'success' ? '!bg-green-500 !text-white !border-green-700' : ''}
+            ${status === 'success' ? '!bg-green-500 !text-white !border-green-700 !border-solid' : ''}
             ${status === 'error' ? '!border-red-500' : ''}
           `}
         >
-          {slot1?.text || "________"}
+          {slot1?.text || "GAP 1"}
         </button>
 
         <span className="py-2">the plane, he</span>
@@ -111,28 +111,28 @@ export const DragDropSentence: React.FC = () => {
         {/* Slot 2 */}
         <button
           onClick={() => handleSlotClick(2)}
-          className={`min-w-[120px] md:min-w-[150px] px-3 md:px-4 py-2 rounded border-2 border-b-4 transition-all text-sm md:text-base
+          className={`min-w-[140px] px-3 py-3 rounded-lg border-2 border-b-4 transition-all text-sm md:text-base font-bold touch-manipulation
             ${slot2 
               ? 'bg-noir-tan text-black border-yellow-700' 
-              : 'bg-gray-200 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-transparent'
+              : 'bg-gray-200 dark:bg-gray-800 border-gray-300 dark:border-gray-600 text-gray-400 dark:text-gray-600 border-dashed'
             }
-            ${status === 'success' ? '!bg-green-500 !text-white !border-green-700' : ''}
+            ${status === 'success' ? '!bg-green-500 !text-white !border-green-700 !border-solid' : ''}
             ${status === 'error' ? '!border-red-500' : ''}
           `}
         >
-          {slot2?.text || "________"}
+          {slot2?.text || "GAP 2"}
         </button>
 
         <span className="py-2">arrested.</span>
       </div>
 
       {/* Word Bank */}
-      <div className="flex flex-wrap gap-4 justify-center">
+      <div className="flex flex-wrap gap-3 md:gap-4 justify-center">
         {bank.map((word) => (
           <button
             key={word.id}
             onClick={() => handleWordClick(word)}
-            className="flex items-center gap-2 px-3 md:px-4 py-2 md:py-3 bg-white dark:bg-zinc-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg shadow-sm hover:border-noir-red hover:-translate-y-1 transition-all text-gray-800 dark:text-gray-200 font-bold text-sm md:text-base touch-manipulation"
+            className="flex items-center gap-2 px-4 py-3 bg-white dark:bg-zinc-800 border-2 border-gray-200 dark:border-gray-600 rounded-lg shadow-sm hover:border-noir-red hover:-translate-y-1 transition-all text-gray-800 dark:text-gray-200 font-bold text-sm md:text-base touch-manipulation"
           >
             <GripVertical size={16} className="text-gray-400" />
             {word.text}
@@ -145,7 +145,7 @@ export const DragDropSentence: React.FC = () => {
         <div className="mt-8 flex justify-center">
           <button
             onClick={checkAnswer}
-            className="bg-noir-red text-white px-8 py-3 rounded-lg font-bold uppercase tracking-widest shadow-lg hover:bg-red-600 transition-colors animate-in fade-in slide-in-from-bottom-2 w-full md:w-auto"
+            className="w-full md:w-auto bg-noir-red text-white px-10 py-4 rounded-lg font-bold uppercase tracking-widest shadow-lg hover:bg-red-600 transition-colors animate-in fade-in slide-in-from-bottom-2 touch-manipulation"
           >
             VERIFY SEQUENCE
           </button>
@@ -154,7 +154,7 @@ export const DragDropSentence: React.FC = () => {
 
       {status === 'success' && (
         <div className="mt-6 text-center text-green-500 font-bold font-mono flex items-center justify-center gap-2 animate-bounce">
-          <Check size={24} /> SEQUENCE VERIFIED
+          <Check size={28} /> SEQUENCE VERIFIED
         </div>
       )}
     </div>

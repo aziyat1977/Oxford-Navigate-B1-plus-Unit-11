@@ -57,7 +57,7 @@ export const ModalMatching: React.FC = () => {
         CONNECT THE CONTEXT
       </h4>
 
-      <div className="flex justify-between gap-2 md:gap-8 lg:gap-16">
+      <div className="flex flex-col md:flex-row justify-between gap-6 md:gap-8 lg:gap-16">
         
         {/* Contexts Column */}
         <div className="flex flex-col gap-3 md:gap-4 flex-1">
@@ -71,7 +71,7 @@ export const ModalMatching: React.FC = () => {
                 onClick={() => handleContextClick(item.id)}
                 disabled={isMatched}
                 className={`
-                  p-3 md:p-4 rounded-lg border-2 text-xs md:text-base font-medium transition-all relative h-full
+                  p-3 md:p-4 rounded-lg border-2 text-sm md:text-base font-medium transition-all relative h-full min-h-[60px]
                   ${isMatched 
                     ? 'bg-green-50 dark:bg-green-900/20 border-green-500 text-green-700 dark:text-green-400 opacity-50' 
                     : isSelected
@@ -81,15 +81,17 @@ export const ModalMatching: React.FC = () => {
                 `}
               >
                 {item.text}
-                {isSelected && <div className="absolute -right-2 md:-right-3 top-1/2 -translate-y-1/2 w-2 h-2 md:w-3 md:h-3 bg-yellow-600 rotate-45"></div>}
+                {isSelected && (
+                  <div className="absolute left-1/2 -bottom-3 md:-right-3 md:top-1/2 md:-translate-y-1/2 md:left-auto w-4 h-4 bg-yellow-600 rotate-45 transform -translate-x-1/2 md:translate-x-0"></div>
+                )}
               </button>
             );
           })}
         </div>
 
         {/* Center Connector */}
-        <div className="flex flex-col justify-center items-center text-gray-300 dark:text-gray-700 px-1">
-           <Link2 size={24} className="md:w-8 md:h-8" />
+        <div className="flex flex-col justify-center items-center text-gray-300 dark:text-gray-700 px-1 py-2 md:py-0">
+           <Link2 size={24} className="md:w-8 md:h-8 rotate-90 md:rotate-0" />
         </div>
 
         {/* Modals Column */}
@@ -104,7 +106,7 @@ export const ModalMatching: React.FC = () => {
                 onClick={() => handleModalClick(item.id)}
                 disabled={isMatched}
                 className={`
-                  p-3 md:p-4 rounded-lg border-2 text-xs md:text-base font-mono font-bold transition-all h-full
+                  p-3 md:p-4 rounded-lg border-2 text-sm md:text-base font-mono font-bold transition-all h-full min-h-[60px]
                   ${isMatched 
                     ? 'bg-green-50 dark:bg-green-900/20 border-green-500 text-green-700 dark:text-green-400 opacity-50' 
                     : selectedContext
